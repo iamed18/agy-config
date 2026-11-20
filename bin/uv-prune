@@ -1,0 +1,11 @@
+#!/bin/sh
+# Prune unused uv cache entries and stale scratch virtualenvs (>30 days old).
+set -eu
+
+UV_BIN="${UV_BIN:-$HOME/.local/bin/uv}"
+"$UV_BIN" cache prune
+
+SCRATCH_DIR="$HOME/.gemini/antigravity/scratch"
+if [ -d "$SCRATCH_DIR" ]; then
+    find "$SCRATCH_DIR" -maxdepth 3 -name ".venv" -type d -mtime +30 -exec rm -rf {} +
+fi

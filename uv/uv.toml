@@ -1,0 +1,4 @@
+python-preference = "only-managed"
+python-downloads = "manual"
+link-mode = "clone"
+compile-bytecode = false

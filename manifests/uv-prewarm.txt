@@ -1,0 +1,13 @@
+# Packages pre-warmed in ~/.cache/uv for sandboxed offline runs (project + script modes)
+numpy
+pandas
+requests
+matplotlib
+pytest
+scipy
+httpx
+pydantic
+pyyaml
+beautifulsoup4
+rich
+tqdm

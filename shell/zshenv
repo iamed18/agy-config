@@ -1,0 +1,9 @@
+# Ensure uv, uvx, managed Python, and uv tools are on PATH in all zsh shells
+if [ -f "$HOME/.local/bin/env" ]; then
+    . "$HOME/.local/bin/env"
+fi
+
+# Suppress progress bar noise in non-interactive (agent) shells
+if [[ ! -o interactive ]]; then
+    export UV_NO_PROGRESS=1
+fi

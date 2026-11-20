@@ -1,0 +1,3 @@
+# Global Python CLI tools installed via `uv tool install`
+ruff
+mypy

@@ -1,0 +1,24 @@
+#!/bin/sh
+# Pre-warm ~/.cache/uv for both offline project installs (uv add --offline)
+# and offline PEP 723 / --with script runs (uv run --offline).
+# Usage: uv-warm pkg1 [pkg2 ...]
+set -eu
+
+if [ "$#" -eq 0 ]; then
+    echo "Usage: uv-warm <package> [<package> ...]" >&2
+    exit 1
+fi
+
+UV_BIN="${UV_BIN:-$HOME/.local/bin/uv}"
+tmpdir=$(mktemp -d "${TMPDIR:-/tmp}/uv-warm.XXXXXX")
+trap 'rm -rf "$tmpdir"' EXIT
+
+# 1. Universal project resolution + wheels
+"$UV_BIN" init --directory "$tmpdir" --no-readme -q
+"$UV_BIN" add --directory "$tmpdir" "$@"
+
+# 2. Platform-specific script/--with resolution
+set -- $(for pkg in "$@"; do printf -- '--with\n%s\n' "$pkg"; done)
+"$UV_BIN" run --no-project "$@" python -c ""
+
+echo "Pre-warmed in ~/.cache/uv (project + script modes)."
