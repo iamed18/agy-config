@@ -10,6 +10,7 @@ Declarative, idempotent global configuration for Antigravity (AGY) and `uv`-base
 - **Automated weekly cleanup**: `bin/uv-prune` + `launchd` user agent (`com.local.uv-prune`, Sundays 03:00) prunes `~/.cache/uv` and removes scratch `.venv` folders untouched for >30 days.
 - **Global AGY customizations**:
   - `agy/rules/python-uv.md` → `~/.gemini/config/rules/python-uv.md` (`always_on`)
+  - `agy/rules/vcs-commit-attribution.md` → `~/.gemini/config/rules/vcs-commit-attribution.md` (`always_on`)
   - `agy/skills/agy-config-sync/SKILL.md` → `~/.gemini/config/skills/agy-config-sync/SKILL.md`
 
 ## Fresh machine onboarding
