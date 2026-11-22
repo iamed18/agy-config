@@ -43,8 +43,8 @@ fi
     printf '%s\n' "$END_MARK"
 } > "$ZSHENV"
 
-echo "==> Deploying AGY global rules and skills"
-mkdir -p "$HOME/.gemini/config/rules" "$HOME/.gemini/config/skills"
+echo "==> Deploying AGY global rules, skills, and agents"
+mkdir -p "$HOME/.gemini/config/rules" "$HOME/.gemini/config/skills" "$HOME/.gemini/config/agents"
 if [ -d "$REPO_DIR/agy/rules" ]; then
     for f in "$REPO_DIR"/agy/rules/*.md; do
         [ -e "$f" ] || continue
@@ -57,6 +57,18 @@ if [ -d "$REPO_DIR/agy/skills" ]; then
         name=$(basename "$d")
         rm -rf "$HOME/.gemini/config/skills/$name"
         cp -R "$d" "$HOME/.gemini/config/skills/$name"
+    done
+fi
+if [ -d "$REPO_DIR/agy/agents" ]; then
+    for entry in "$REPO_DIR"/agy/agents/*; do
+        [ -e "$entry" ] || continue
+        name=$(basename "$entry")
+        if [ -d "$entry" ]; then
+            rm -rf "$HOME/.gemini/config/agents/$name"
+            cp -R "$entry" "$HOME/.gemini/config/agents/$name"
+        elif [ -f "$entry" ]; then
+            cp "$entry" "$HOME/.gemini/config/agents/$name"
+        fi
     done
 fi
 

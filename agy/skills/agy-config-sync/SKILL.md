@@ -19,7 +19,7 @@ If neither exists, ask the user where they want it cloned (`https://github.com/i
 ## 2. Common workflows
 
 ### Capture live machine changes into the repo
-When the user has edited or added global rules (`~/.gemini/config/rules/`), global skills (`~/.gemini/config/skills/`), or `~/.config/uv/uv.toml`:
+When the user has edited or added global rules (`~/.gemini/config/rules/`), global skills (`~/.gemini/config/skills/`), global custom agents (`~/.gemini/config/agents/`), or `~/.config/uv/uv.toml`:
 1. Run `./capture.sh` inside the `agy-config` repo.
 2. Run `git status` and `git diff` to review every change.
 3. Commit with a clear message (push to `origin` only when the user asks).

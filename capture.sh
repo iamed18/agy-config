@@ -24,6 +24,21 @@ if [ -d "$HOME/.gemini/config/skills" ]; then
     done
 fi
 
+echo "==> Capturing AGY global agents"
+if [ -d "$HOME/.gemini/config/agents" ]; then
+    mkdir -p "$REPO_DIR/agy/agents"
+    for entry in "$HOME/.gemini/config/agents"/*; do
+        [ -e "$entry" ] || continue
+        name=$(basename "$entry")
+        if [ -d "$entry" ]; then
+            rm -rf "$REPO_DIR/agy/agents/$name"
+            cp -R "$entry" "$REPO_DIR/agy/agents/$name"
+        elif [ -f "$entry" ]; then
+            cp "$entry" "$REPO_DIR/agy/agents/$name"
+        fi
+    done
+fi
+
 echo "==> Capturing uv.toml and global Python version"
 if [ -f "$HOME/.config/uv/uv.toml" ]; then
     cp "$HOME/.config/uv/uv.toml" "$REPO_DIR/uv/uv.toml"

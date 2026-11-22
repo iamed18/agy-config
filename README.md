@@ -12,8 +12,11 @@ Declarative, idempotent global configuration for Antigravity (AGY) and `uv`-base
   - `agy/rules/python-uv.md` → `~/.gemini/config/rules/python-uv.md` (`always_on`)
   - `agy/rules/vcs-commit-attribution.md` → `~/.gemini/config/rules/vcs-commit-attribution.md` (`always_on`)
   - `agy/rules/flash-delegation.md` → `~/.gemini/config/rules/flash-delegation.md` (`always_on`)
+  - `agy/rules/code-reviewer-soul.md` → `~/.gemini/config/rules/code-reviewer-soul.md` (`always_on`)
   - `agy/skills/agy-config-sync/SKILL.md` → `~/.gemini/config/skills/agy-config-sync/SKILL.md`
   - `agy/skills/flash-delegation/SKILL.md` → `~/.gemini/config/skills/flash-delegation/SKILL.md`
+  - `agy/skills/torvalds-reviewer-soul/SKILL.md` → `~/.gemini/config/skills/torvalds-reviewer-soul/SKILL.md`
+  - `agy/agents/torvalds-reviewer/agent.md` → `~/.gemini/config/agents/torvalds-reviewer/agent.md`
 
 ## Fresh machine onboarding
 
@@ -30,7 +33,7 @@ cd ~/.agy-config
 | Task | Command |
 |---|---|
 | Pull remote updates & apply locally (offline-safe) | `git pull && ./apply.sh` |
-| Capture live changes from `~/.gemini/config/{rules,skills}` & `~/.config/uv/uv.toml` into this repo | `./capture.sh && git diff` |
+| Capture live changes from `~/.gemini/config/{rules,skills,agents}` & `~/.config/uv/uv.toml` into this repo | `./capture.sh && git diff` |
 | Add a new pre-warmed package | Append to `manifests/uv-prewarm.txt`, run `uv-warm <pkg>`, update `agy/rules/python-uv.md`, then `./apply.sh` |
 | Add a new global CLI tool | Append to `manifests/uv-tools.txt`, run `uv tool install <tool>`, update `agy/rules/python-uv.md`, then `./apply.sh` |
 | Re-run offline verification | `./verify.sh` |

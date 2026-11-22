@@ -20,7 +20,10 @@ cmp -s "$REPO_DIR/uv/uv.toml" "$HOME/.config/uv/uv.toml" || {
     exit 1
 }
 [ -f "$HOME/.gemini/config/rules/python-uv.md" ] || { echo "FAIL: missing python-uv.md rule" >&2; exit 1; }
+[ -f "$HOME/.gemini/config/rules/code-reviewer-soul.md" ] || { echo "FAIL: missing code-reviewer-soul.md rule" >&2; exit 1; }
 [ -f "$HOME/.gemini/config/skills/agy-config-sync/SKILL.md" ] || { echo "FAIL: missing agy-config-sync skill" >&2; exit 1; }
+[ -f "$HOME/.gemini/config/skills/torvalds-reviewer-soul/SKILL.md" ] || { echo "FAIL: missing torvalds-reviewer-soul skill" >&2; exit 1; }
+[ -f "$HOME/.gemini/config/agents/torvalds-reviewer/agent.md" ] || { echo "FAIL: missing torvalds-reviewer agent" >&2; exit 1; }
 
 if [ "$(uname -s)" = "Darwin" ]; then
     [ -f "$HOME/Library/LaunchAgents/com.local.uv-prune.plist" ] || {

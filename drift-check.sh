@@ -114,7 +114,37 @@ if [ -d "$HOME/.gemini/config/skills" ]; then
     done
 fi
 
-echo "=== 7. Global uv CLI tools (manifests/uv-tools.txt) ==="
+echo "=== 7. AGY global agents (~/.gemini/config/agents) ==="
+if [ -d "$REPO_DIR/agy/agents" ]; then
+    for entry in "$REPO_DIR"/agy/agents/*; do
+        [ -e "$entry" ] || continue
+        name=$(basename "$entry")
+        live_e="$HOME/.gemini/config/agents/$name"
+        if [ -d "$entry" ]; then
+            if [ ! -d "$live_e" ]; then
+                report_drift "agent/$name missing on host ($live_e)"
+            elif ! diff -rq "$entry" "$live_e" >/dev/null 2>&1; then
+                report_drift "agent/$name differs ($live_e vs $entry)"
+                diff -ru "$entry" "$live_e" | head -n 40 || true
+            else
+                report_ok "agent/$name"
+            fi
+        elif [ -f "$entry" ]; then
+            check_file "agent/$name" "$entry" "$live_e"
+        fi
+    done
+fi
+if [ -d "$HOME/.gemini/config/agents" ]; then
+    for entry in "$HOME/.gemini/config/agents"/*; do
+        [ -e "$entry" ] || continue
+        name=$(basename "$entry")
+        if [ ! -e "$REPO_DIR/agy/agents/$name" ]; then
+            report_drift "Untracked global agent on host: $entry"
+        fi
+    done
+fi
+
+echo "=== 8. Global uv CLI tools (manifests/uv-tools.txt) ==="
 INSTALLED_TOOLS=$("$HOME/.local/bin/uv" tool list 2>/dev/null | awk '/^[a-zA-Z0-9._-]+ v/ { print $1 }')
 while IFS= read -r tool; do
     tool=$(printf '%s' "$tool" | sed 's/#.*//; s/^[[:space:]]*//; s/[[:space:]]*$//')
@@ -131,13 +161,13 @@ for inst in $INSTALLED_TOOLS; do
     fi
 done
 
-echo "=== 8. launchd plist (macOS) ==="
+echo "=== 9. launchd plist (macOS) ==="
 if [ "$(uname -s)" = "Darwin" ]; then
     sed "s|__HOME__|$HOME|g" "$REPO_DIR/launchd/com.local.uv-prune.plist.tmpl" > "$TMP_PLIST"
     check_file "launchd/com.local.uv-prune.plist" "$TMP_PLIST" "$HOME/Library/LaunchAgents/com.local.uv-prune.plist"
 fi
 
-echo "=== 9. Offline verification (verify.sh) ==="
+echo "=== 10. Offline verification (verify.sh) ==="
 if "$REPO_DIR/verify.sh" >/dev/null 2>&1; then
     report_ok "verify.sh (offline cache & PATH)"
 else
