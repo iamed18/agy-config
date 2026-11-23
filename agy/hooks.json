@@ -1,0 +1,16 @@
+{
+  "secret-and-pii-guard": {
+    "PreToolUse": [
+      {
+        "matcher": "run_command",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "~/.local/bin/agy-secret-guard --mode agy-hook",
+            "timeout": 15
+          }
+        ]
+      }
+    ]
+  }
+}

@@ -20,6 +20,9 @@ echo "==> Installing helper scripts to ~/.local/bin"
 mkdir -p "$HOME/.local/bin"
 install -m 0755 "$REPO_DIR/bin/uv-warm" "$HOME/.local/bin/uv-warm"
 install -m 0755 "$REPO_DIR/bin/uv-prune" "$HOME/.local/bin/uv-prune"
+if [ -f "$REPO_DIR/bin/agy-secret-guard" ]; then
+    install -m 0755 "$REPO_DIR/bin/agy-secret-guard" "$HOME/.local/bin/agy-secret-guard"
+fi
 
 echo "==> Updating managed block in ~/.zshenv"
 BEGIN_MARK="# >>> agy-config >>>"
@@ -43,8 +46,11 @@ fi
     printf '%s\n' "$END_MARK"
 } > "$ZSHENV"
 
-echo "==> Deploying AGY global rules, skills, and agents"
+echo "==> Deploying AGY global rules, hooks, skills, and agents"
 mkdir -p "$HOME/.gemini/config/rules" "$HOME/.gemini/config/skills" "$HOME/.gemini/config/agents"
+if [ -f "$REPO_DIR/agy/hooks.json" ]; then
+    cp "$REPO_DIR/agy/hooks.json" "$HOME/.gemini/config/hooks.json"
+fi
 if [ -d "$REPO_DIR/agy/rules" ]; then
     for f in "$REPO_DIR"/agy/rules/*.md; do
         [ -e "$f" ] || continue
@@ -70,6 +76,16 @@ if [ -d "$REPO_DIR/agy/agents" ]; then
             cp "$entry" "$HOME/.gemini/config/agents/$name"
         fi
     done
+fi
+
+if [ -d "$REPO_DIR/git-hooks" ]; then
+    echo "==> Deploying global git hooks (~/.config/git/hooks)"
+    mkdir -p "$HOME/.config/git/hooks"
+    for hook in "$REPO_DIR"/git-hooks/*; do
+        [ -f "$hook" ] || continue
+        install -m 0755 "$hook" "$HOME/.config/git/hooks/$(basename "$hook")"
+    done
+    git config --global core.hooksPath "$HOME/.config/git/hooks"
 fi
 
 if [ "$(uname -s)" = "Darwin" ]; then

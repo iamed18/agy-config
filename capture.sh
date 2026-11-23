@@ -4,12 +4,27 @@ set -eu
 
 REPO_DIR="$(CDPATH= cd -- "$(dirname -- "$0")" && pwd)"
 
-echo "==> Capturing AGY global rules"
+echo "==> Capturing AGY global rules and hooks"
 if [ -d "$HOME/.gemini/config/rules" ]; then
     mkdir -p "$REPO_DIR/agy/rules"
     for f in "$HOME/.gemini/config/rules"/*.md; do
         [ -e "$f" ] || continue
         cp "$f" "$REPO_DIR/agy/rules/$(basename "$f")"
+    done
+fi
+if [ -f "$HOME/.gemini/config/hooks.json" ]; then
+    cp "$HOME/.gemini/config/hooks.json" "$REPO_DIR/agy/hooks.json"
+fi
+if [ -f "$HOME/.local/bin/agy-secret-guard" ]; then
+    mkdir -p "$REPO_DIR/bin"
+    install -m 0755 "$HOME/.local/bin/agy-secret-guard" "$REPO_DIR/bin/agy-secret-guard"
+fi
+if [ -d "$HOME/.config/git/hooks" ]; then
+    mkdir -p "$REPO_DIR/git-hooks"
+    for hook in pre-commit commit-msg pre-push; do
+        if [ -f "$HOME/.config/git/hooks/$hook" ]; then
+            install -m 0755 "$HOME/.config/git/hooks/$hook" "$REPO_DIR/git-hooks/$hook"
+        fi
     done
 fi
 

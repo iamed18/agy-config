@@ -50,6 +50,9 @@ check_file ".python-version" "$REPO_DIR/manifests/python-version.txt" "$HOME/.co
 echo "=== 3. Helper scripts (~/.local/bin) ==="
 check_file "bin/uv-warm" "$REPO_DIR/bin/uv-warm" "$HOME/.local/bin/uv-warm"
 check_file "bin/uv-prune" "$REPO_DIR/bin/uv-prune" "$HOME/.local/bin/uv-prune"
+if [ -f "$REPO_DIR/bin/agy-secret-guard" ]; then
+    check_file "bin/agy-secret-guard" "$REPO_DIR/bin/agy-secret-guard" "$HOME/.local/bin/agy-secret-guard"
+fi
 
 echo "=== 4. ~/.zshenv managed block ==="
 TMP_BLOCK=$(mktemp "${TMPDIR:-/tmp}/zshenv-block.XXXXXX")
@@ -74,7 +77,17 @@ else
     report_drift "~/.zshenv does not exist"
 fi
 
-echo "=== 5. AGY global rules (~/.gemini/config/rules) ==="
+echo "=== 5. AGY global rules & hooks (~/.gemini/config) ==="
+if [ -f "$REPO_DIR/agy/hooks.json" ]; then
+    check_file "agy/hooks.json" "$REPO_DIR/agy/hooks.json" "$HOME/.gemini/config/hooks.json"
+fi
+if [ -d "$REPO_DIR/git-hooks" ]; then
+    for hook in "$REPO_DIR"/git-hooks/*; do
+        [ -f "$hook" ] || continue
+        hname=$(basename "$hook")
+        check_file "git-hooks/$hname" "$hook" "$HOME/.config/git/hooks/$hname"
+    done
+fi
 for f in "$REPO_DIR"/agy/rules/*.md; do
     [ -e "$f" ] || continue
     name=$(basename "$f")

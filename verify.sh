@@ -5,7 +5,7 @@ set -eu
 REPO_DIR="$(CDPATH= cd -- "$(dirname -- "$0")" && pwd)"
 
 echo "==> Checking PATH & binaries"
-for bin in uv uvx uv-warm uv-prune; do
+for bin in uv uvx uv-warm uv-prune agy-secret-guard; do
     command -v "$bin" >/dev/null 2>&1 || { echo "FAIL: $bin not on PATH" >&2; exit 1; }
 done
 while IFS= read -r tool; do
@@ -21,6 +21,11 @@ cmp -s "$REPO_DIR/uv/uv.toml" "$HOME/.config/uv/uv.toml" || {
 }
 [ -f "$HOME/.gemini/config/rules/python-uv.md" ] || { echo "FAIL: missing python-uv.md rule" >&2; exit 1; }
 [ -f "$HOME/.gemini/config/rules/code-reviewer-soul.md" ] || { echo "FAIL: missing code-reviewer-soul.md rule" >&2; exit 1; }
+[ -f "$HOME/.gemini/config/rules/secret-and-pii-guard.md" ] || { echo "FAIL: missing secret-and-pii-guard.md rule" >&2; exit 1; }
+[ -f "$HOME/.gemini/config/hooks.json" ] || { echo "FAIL: missing hooks.json" >&2; exit 1; }
+[ -x "$HOME/.config/git/hooks/pre-commit" ] || { echo "FAIL: missing global git pre-commit hook" >&2; exit 1; }
+[ -x "$HOME/.config/git/hooks/commit-msg" ] || { echo "FAIL: missing global git commit-msg hook" >&2; exit 1; }
+[ -x "$HOME/.config/git/hooks/pre-push" ] || { echo "FAIL: missing global git pre-push hook" >&2; exit 1; }
 [ -f "$HOME/.gemini/config/skills/agy-config-sync/SKILL.md" ] || { echo "FAIL: missing agy-config-sync skill" >&2; exit 1; }
 [ -f "$HOME/.gemini/config/skills/torvalds-reviewer-soul/SKILL.md" ] || { echo "FAIL: missing torvalds-reviewer-soul skill" >&2; exit 1; }
 [ -f "$HOME/.gemini/config/agents/torvalds-reviewer/agent.md" ] || { echo "FAIL: missing torvalds-reviewer agent" >&2; exit 1; }

@@ -4,7 +4,7 @@ trigger: always_on
 
 # Code Reviewer Soul: Torvalds Reviewer
 
-Whenever a code review or code reviewer is commenced in any project on this host (`turing`), automatically use the **Torvalds Reviewer** soul (sourced from `Mte90/linus-torvalds-skill`, `soul/qwen/soul.md`):
+Whenever a code review or code reviewer is commenced in any project on this host, automatically use the **Torvalds Reviewer** soul (sourced from `Mte90/linus-torvalds-skill`, `soul/qwen/soul.md`):
 
 - **Subagent code reviewers:** Whenever spawning a subagent to perform code review, diff audit, or PR review, invoke the global custom agent `torvalds-reviewer` (`invoke_subagent(TypeName="torvalds-reviewer", ...)`) rather than a generic `self` or `research` subagent.
 - **Swarm, workflow, or multi-agent reviewers/verifiers:** Whenever briefing a reviewer, verifier, critic, or auditor worker (e.g., via `swarm`, `run_workflow`, or `/teamwork`), explicitly instruct it to read and adopt `~/.gemini/config/skills/torvalds-reviewer-soul/SKILL.md` before reviewing.
